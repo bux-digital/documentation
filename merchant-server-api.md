@@ -78,8 +78,8 @@ If the `return_json` option is used, the response will be a JSON format payload 
         "ipn_url": "https://example.com/ipn?id=123",
         "ipn_body": {
             "merchant": [
-                "1MuwofKDBfyyNLmMybseUoRqNTkhKg6s17",
-                "1MuwofKDBfyyNLmMybseUoRqNTkhKg6s17"
+                "etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds",
+                "etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds"
             ],
             "invoice": "asd123",
             "custom": "FFWSD",
@@ -167,7 +167,7 @@ Upon successful payment, an IPN request is sent to `ipn_url`, originating from t
 #### IPN POST Data
 * `payment_id` - corresponds to `paymentId` in invoice creation response
 * `txn_id` - transaction hash of payment. **This value can (and should) be used by the merchant to independently verify the existence of the transaction on the blockchain before fulfilling the corresponding order**
-* `merchant` - a single legacy format address or a JSON-encoded array of destination addresses
+* `merchant` - a single eToken address or a JSON-encoded array of destination addresses
 * `amount1` - a single number representing some amount of BUX or a JSON-encoded array of numbers representing destination amounts
 * `invoice` - The external identifier of the invoice (ie. the invoice number displayed to the buyer)
 * `custom` - Corresponds to `order_key`. The internal identifier of the invoice (ie. the primary key of the invoice row in the merchant's database)
