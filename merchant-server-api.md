@@ -40,7 +40,7 @@ If the `return_json` option is used, the response will be a JSON format payload 
 * `outputs` - What output(s) your transaction must include in order to be accepted
 * `time` - ISO Date format of when the invoice was generated
 * `expires` - ISO Date format of when the invoice will expire
-* `status` - The status of the invoice `open / paid / expired`
+* `status` - The status of the invoice `open` or `paid`
 * `memo` - A plain text description of the payment request, can be displayed to the user / kept for records
 * `paymentUrl` - The url where the payment should be sent
 * `paymentId` - The invoice ID, can be kept for records
@@ -134,13 +134,17 @@ The payment process follows the [SLP Payment Protocol](https://github.com/vinarm
 
 A GET request is made to `paymentUrl` with a header of `Accept: application/payment-request`
 
-#### Request Status (Websockets)
+#### Request Status (Websocket)
 
 A Websocket Secure (WSS) request is made to `wss://` and the origin and path of `paymentUrl` (eg. `wss://pay.badger.cash/i/TSWJ5`)
 
+When connection is established, a string consisting solely of `paymentId` (eg. `TSWJ5`) must be sent as the first message. If any other message is sent, or if `paymentId` is invalid, a JSON string representing an empty object will be returned and the connection will close.
+
 #### Response
 
-Server will respond with a JSON response of the same type as the response during invoice creation.If status is "open," connection will remain open until closed by client or until status changes to either "expired" or "paid," at which time a new object will be returned and the connection will close.
+Server will respond with a JSON response of the same type as the response during invoice creation. 
+
+If websocket is used and `status` is `open`, connection will remain open until closed by client or until `status` changes to `paid`, at which time a new object, reflecting the updated state, will be returned and the connection will close. If the invoice expires, a JSON string representing an empty object will be returned and the connection will close.
 
 ### Invoice Payment Via Web Wallet
 
