@@ -132,7 +132,7 @@ The payment process follows the [SLP Payment Protocol](https://github.com/vinarm
 
 #### Request Status
 
-A GET request is made to `paymentUrl` with a header of `Accept: application/json`
+A GET request is made to `paymentUrl` with a header of `Accept: application/payment-request`
 
 #### Request Status (Websockets)
 
