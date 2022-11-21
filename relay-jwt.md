@@ -43,14 +43,14 @@ The subject claim consists of a chain of cryptographic certificates that, when d
 
 The `sub` is a Base64-encoded string representing serialized (left to right) bytes in the following order
 
-1. (2 bytes, big endian) *integer* - signature length
-2. (variable) *bytes* - signature: a signature, using the ES256 algorithm, that signs the serialized bytes of the values described in #3 through #8, using the private key associated with the public key in #4
-3. (1 byte) *integer* - public key length
-4. (variable) *bytes* - public key: if this is the most recent certificate in the chain, the public key must match the public key for the JWT itself
-5. (1 byte) *integer* - version: `1` is the only valid value currently
-6. (1 byte) *integer* - fee type: `0` for a percentage based fee (the value represents `x/1000` so 5% would be represented as `50`) or `1` for a fixed fee
-7. (8 bytes, big endian) *integer* - amount: between `0` and `1000` for percentage or the number of base units to be charged for fixed
-8. (variable) *bytes* - previous subject: the entire subject representing the chain of certificates "upstream" of the issuer
+1. (2 bytes, big endian) *integer* - **signature length**
+2. (variable) *bytes* - **signature**: a signature, using the ES256 algorithm, that signs the serialized bytes of the values described in #3 through #8, using the private key associated with the public key in #4
+3. (1 byte) *integer* - **public key length**
+4. (variable) *bytes* - **public key**: if this is the most recent certificate in the chain, the public key must match the public key for the JWT itself
+5. (1 byte) *integer* - **version**: `1` is the only valid value currently
+6. (1 byte) *integer* - **fee type**: `0` for a percentage based fee (the value represents `x/1000` so 5% would be represented as `50`) or `1` for a fixed fee
+7. (8 bytes, big endian) *integer* - **amount**: between `0` and `1000` for percentage or the number of base units to be charged for fixed
+8. (variable) *bytes* - **previous subject**: the entire subject representing the chain of certificates "upstream" of the issuer
 
 #### Certificate Validation
 
