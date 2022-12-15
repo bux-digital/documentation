@@ -1,6 +1,6 @@
 # BUX.digital Payment Protocol Merchant Server
 
-An API for the creation and fulfillment of BUX eToken invoices utilizing the [Simple Ledger Payment Protocol](https://github.com/vinarmani/slp-specifications/blob/payment-protocol/slp-payment-protocol.md)
+An API for the creation and fulfillment of BUX eToken invoices utilizing the [Simple Ledger Payment Protocol](https://github.com/simpleledger/slp-specifications/blob/master/slp-payment-protocol.md)
 
 ## Invoice Creation
 
@@ -135,7 +135,7 @@ curl -v -L -H 'Content-Type: application/json' 'https://bux.digital/v1/pay?merch
 
 ## Payment
 
-The payment process follows the [SLP Payment Protocol](https://github.com/vinarmani/slp-specifications/blob/payment-protocol/slp-payment-protocol.md)
+The payment process follows the [SLP Payment Protocol](https://github.com/simpleledger/slp-specifications/blob/master/slp-payment-protocol.md)
 
 
 ## API Endpoints
