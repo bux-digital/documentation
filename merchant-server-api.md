@@ -1,14 +1,16 @@
 # BUX.digital Payment Protocol Merchant Server
 
-An API for the creation and fulfillment of BUX eToken invoices utilizing the [Simple Ledger Payment Protocol](https://github.com/vinarmani/slp-specifications/blob/payment-protocol/slp-payment-protocol.md)
+An API for the creation and fulfillment of BUX eToken invoices utilizing the [Simple Ledger Payment Protocol](https://github.com/simpleledger/slp-specifications/blob/master/slp-payment-protocol.md)
 
 ## Invoice Creation
 
 ### Request
 
-A GET request is made to `https://bux.digital/pay/`.
+A GET request is made to `https://bux.digital/v1/pay/`.
 
 GET is used (as opposed to POST) in this case to allow the invoice creation request URL itself to be used as a standalone "buy" link on web pages, in emails, or as a QR code.
+
+*This API is public and requires no authorization. However, invoice creation requests made without valid authorization credentials will have a **10%** (of the sum of ```amount```) non-custodial processing fee added as an additional output in the payment request.*
 
 #### GET Query Data
 The following GET query parameters are used **(all values must be URI encoded)**:
@@ -17,6 +19,8 @@ The following GET query parameters are used **(all values must be URI encoded)**
 * `order_key` - The internal identifier of the invoice (ie. the primary key of the invoice row in the merchant's database)
 * `merchant_addr` - a single eToken address or a JSON-encoded array of destination addresses
 * `amount` - a single number representing some amount of BUX or a JSON-encoded array of numbers representing destination amounts
+* `offer_name` - (optional) A string with the name of the offer being made by the mertchant to the customer
+* `offer_description` - (optional) A string with the description of the offer being made by the mertchant to the customer
 * `success_url` - (optional) The URL that the buyer's wallet will redirect to upon successful payment
 * `cancel_url` - (optional) The URL that the buyer's wallet will redirect to if payment is cancelled
 * `ipn_url` - (optional) The URL to which IPN data will be posted upon successful payment
@@ -54,7 +58,7 @@ If the `return_json` option is used, the response will be a JSON format payload 
     "requiredFeeRate": 1,
     "outputs": [
         {
-            "script": "6a04534c500001010453454e44207e7dacd72dcdb14e00a03dd3aff47f019ed51a6f1f4e4f532ae50692f62bc4e50800000000000347d808000000000004bed8",
+            "script": "6a04534c500001010453454e44207e7dacd72dcdb14e00a03dd3aff47f019ed51a6f1f4e4f532ae50692f62bc4e50800000000000347d808000000000004af3808000000000000cbe8",
             "amount": 0
         },
         {
@@ -64,13 +68,17 @@ If the `return_json` option is used, the response will be a JSON format payload 
         {
             "amount": 546,
             "script": "76a914e565e4e8ad08d520fde6890fe1b2f8e9210f29d688ac"
+        },
+        {
+            "amount": 546,
+            "script": "76a914ae789c93c904055b1ad88b1c645645d9f045178588ac"
         }
     ],
-    "time": "2022-10-29T03:36:33.270Z",
-    "expires": "2022-10-29T03:51:33.270Z",
+    "time": "2022-12-01T03:01:53.481Z",
+    "expires": "2022-12-01T03:16:53.481Z",
     "memo": "Payment to Some Merchant for order #asd123",
-    "paymentUrl": "https://pay.badger.cash/i/4TW2V",
-    "paymentId": "4TW2V",
+    "paymentUrl": "https://pay.badger.cash/i/A5JAK",
+    "paymentId": "A5JAK",
     "status": "open",
     "callback": {
         "success_url": "https://example.com/success?id=123",
@@ -79,15 +87,19 @@ If the `return_json` option is used, the response will be a JSON format payload 
         "ipn_body": {
             "merchant": [
                 "etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds",
-                "etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds"
+                "etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds",
+                "etoken:qzh838yneyzq2kc6mz93cezkghvlq3ghs52c7nsmet"
             ],
             "invoice": "asd123",
+            "offer_name": "Great offer",
+            "offer_description": "This is an amazing offer!",
             "custom": "FFWSD",
             "ipn_type": "simple",
             "currency1": "USD",
             "amount1": [
                 21.5,
-                31.1
+                30.7,
+                5.22
             ]
         }
     }
@@ -96,7 +108,7 @@ If the `return_json` option is used, the response will be a JSON format payload 
 
 ### Curl Example
 ```
-curl -v -L -H 'Content-Type: application/json' 'http://bux.digital/v1/pay?merchant_name=Some%20Merchant&invoice=asd123&order_key=FFWSD&amount=%5B21.5%2C31.1%5D&merchant_addr=%5B%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%2C%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%5D&success_url=https%3A%2F%2Fexample.com%2Fsuccess%3Fid%3D123&cancel_url=https%3A%2F%2Fexample.com%2Fcancel%3Fid%3D123&ipn_url=https%3A%2F%2Fexample.com%2Fipn%3Fid%3D123&return_json=true'
+curl -v -L -H 'Content-Type: application/json' 'https://bux.digital/v1/pay?merchant_name=Some%20Merchant&invoice=asd123&order_key=FFWSD&amount=%5B21.5%2C30.7%5D&merchant_addr=%5B%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%2C%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%5D&success_url=https%3A%2F%2Fexample.com%2Fsuccess%3Fid%3D123&cancel_url=https%3A%2F%2Fexample.com%2Fcancel%3Fid%3D123&ipn_url=https%3A%2F%2Fexample.com%2Fipn%3Fid%3D123&return_json=true&offer_name=Great%20offer&offer_description=This%20is%20an%20amazing%20offer%21'
 
 * TCP_NODELAY set
 * Connected to bux.digital (216.238.107.167) port 80 (#0)
@@ -113,17 +125,17 @@ curl -v -L -H 'Content-Type: application/json' 'http://bux.digital/v1/pay?mercha
 < Content-Type: application/json; charset=utf-8
 < Content-Length: 935
 < ETag: W/"3a7-M/YJlKaN5vjzC72cjO+CmC3ip04"
-< Date: Sat, 29 Oct 2022 04:21:53 GMT
+< Date: Thu, 1 Dec 2022 03:08:48 GMT
 < Connection: keep-alive
 < Keep-Alive: timeout=5
 <
 * Connection #1 to host bux.digital left intact
-{"network":"main","currency":"etoken","requiredFeeRate":1,"outputs":[{"script":"6a04534c500001010453454e44207e7dacd72dcdb14e00a03dd3aff47f019ed51a6f1f4e4f532ae50692f62bc4e50800000000000347d808000000000004bed8","amount":0},{"amount":546,"script":"76a914e565e4e8ad08d520fde6890fe1b2f8e9210f29d688ac"},{"amount":546,"script":"76a914e565e4e8ad08d520fde6890fe1b2f8e9210f29d688ac"}],"time":"2022-10-29T04:21:53.278Z","expires":"2022-10-29T04:36:53.278Z","memo":"Payment to Some Merchant for order #asd123","paymentUrl":"https://pay.badger.cash/i/TSWJ5","paymentId":"TSWJ5","status":"open","callback":{"success_url":"https://example.com/success?id=123","cancel_url":"https://example.com/cancel?id=123","ipn_url":"https://example.com/ipn?id=123","ipn_body":{"merchant":["1MuwofKDBfyyNLmMybseUoRqNTkhKg6s17","1MuwofKDBfyyNLmMybseUoRqNTkhKg6s17"],"invoice":"asd123","custom":"FFWSD","ipn_type":"simple","currency1":"USD","amount1":[21.5,31.1]}}}
+{"network":"main","currency":"etoken","requiredFeeRate":1,"outputs":[{"script":"6a04534c500001010453454e44207e7dacd72dcdb14e00a03dd3aff47f019ed51a6f1f4e4f532ae50692f62bc4e50800000000000347d808000000000004af3808000000000000cbe8","amount":0},{"amount":546,"script":"76a914e565e4e8ad08d520fde6890fe1b2f8e9210f29d688ac"},{"amount":546,"script":"76a914e565e4e8ad08d520fde6890fe1b2f8e9210f29d688ac"},{"amount":546,"script":"76a914ae789c93c904055b1ad88b1c645645d9f045178588ac"}],"time":"2022-12-01T03:08:48.718Z","expires":"2022-12-01T03:23:48.718Z","memo":"Payment to Some Merchant for order #asd123","paymentUrl":"https://pay.badger.cash/i/FMWBT","paymentId":"FMWBT","status":"open","callback":{"success_url":"https://example.com/success?id=123","cancel_url":"https://example.com/cancel?id=123","ipn_url":"https://example.com/ipn?id=123","ipn_body":{"merchant":["etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds","etoken:qrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds","etoken:qzh838yneyzq2kc6mz93cezkghvlq3ghs52c7nsmet"],"invoice":"asd123","offer_name":"Great offer","offer_description":"This is an amazing offer!","custom":"FFWSD","ipn_type":"simple","currency1":"USD","amount1":[21.5,30.7,5.22]}}}
 ```
 
 ## Payment
 
-The payment process follows the [SLP Payment Protocol](https://github.com/vinarmani/slp-specifications/blob/payment-protocol/slp-payment-protocol.md)
+The payment process follows the [SLP Payment Protocol](https://github.com/simpleledger/slp-specifications/blob/master/slp-payment-protocol.md)
 
 
 ## API Endpoints
