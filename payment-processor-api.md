@@ -31,6 +31,7 @@ The following properties are in the object sent as JSON POST body:
 * `amount` - the amount of the sale in USD
 * `country` - two-letter cardholder country (as registered on card)
 * `postcode` - postcode for card
+* `email` - cardholder email (can be used in email validation)
 * `phone` - phone number associated with cardholder (can be used in SMS validation)
 * `metadata` - metadata for BUX validation, in hexadecimal format. 255 bytes maximum
 
@@ -52,7 +53,7 @@ The following properties are in the object sent as JSON POST body:
 
 ### Curl Example
 ```
-curl -XPOST -H -v -L "Content-type: application/json" -d '{"client_id":123456,"item_id":"bux1","credit_card_number":5555444433332222,"full_name":"John Doe","expiry":"0327","cvc":777,"amount":56.99,"country":"US","postcode":"12212","phone":"+17775551212","metadata":"38bb76ed09cb953808481242a04703ba5203ba12b386157e6d7d64cc52f88077"}' 'https://processor.com/purchase/'
+curl -XPOST -H -v -L "Content-type: application/json" -d '{"client_id":123456,"item_id":"bux1","credit_card_number":5555444433332222,"full_name":"John Doe","expiry":"0327","cvc":777,"amount":56.99,"country":"US","postcode":"12212","email":"buyer@email.com","phone":"+17775551212","metadata":"38bb76ed09cb953808481242a04703ba5203ba12b386157e6d7d64cc52f88077"}' 'https://processor.com/purchase/'
 
 * TCP_NODELAY set
 * Connected to processor.com (111.111.111.111) port 80 (#0)
@@ -131,7 +132,7 @@ curl -v -XGET -H "Content-type: application/json" 'https://processor.com/order/?
 < Keep-Alive: timeout=5
 <
 * Connection #1 to host processor.com left intact
-{"payment_id":"aabb1","status":"complete","client_id":123456,"item_id":"bux1","credit_card_number":5555444433332222,"full_name":"John Doe","expiry":"0327","cvc":777,"amount":56.99,"country":"US","postcode":"12212","phone":"+17775551212","metadata":"38bb76ed09cb953808481242a04703ba5203ba12b386157e6d7d64cc52f88077"}
+{"payment_id":"aabb1","status":"complete","client_id":123456,"item_id":"bux1","credit_card_number":5555444433332222,"full_name":"John Doe","expiry":"0327","cvc":777,"amount":56.99,"country":"US","postcode":"12212","email":"buyer@email.com","phone":"+17775551212","metadata":"38bb76ed09cb953808481242a04703ba5203ba12b386157e6d7d64cc52f88077"}
 ```
 
 In the case that `status` is `complete`, the response from the BUX API to the payment processor is the authcode response body example from the earlier section.
