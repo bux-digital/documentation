@@ -6,7 +6,9 @@ An API for the creation and fulfillment of BUX eToken invoices utilizing the [Si
 
 ### Request
 
-A GET request is made to `https://bux.digital/v2/pay/`.
+A GET request is made to 
+* `https://bux.digital/v2/pay/` (Production)
+* `https://dev-api.bux.digital/v2/pay/` (Sandbox)
 
 GET is used (as opposed to POST) in this case to allow the invoice creation request URL itself to be used as a standalone "buy" link on web pages, in emails, or as a QR code.
 
