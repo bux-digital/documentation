@@ -110,7 +110,7 @@ If the `return_json` option is used, the response will be a JSON format payload 
 
 ### Curl Example
 ```
-curl -v -L -H 'Content-Type: application/json' 'https://bux.digital/v1/pay?merchant_name=Some%20Merchant&invoice=asd123&order_key=FFWSD&amount=%5B21.5%2C30.7%5D&merchant_addr=%5B%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%2C%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%5D&success_url=https%3A%2F%2Fexample.com%2Fsuccess%3Fid%3D123&cancel_url=https%3A%2F%2Fexample.com%2Fcancel%3Fid%3D123&ipn_url=https%3A%2F%2Fexample.com%2Fipn%3Fid%3D123&return_json=true&offer_name=Great%20offer&offer_description=This%20is%20an%20amazing%20offer%21'
+curl -v -L -H 'Content-Type: application/json' 'https://bux.digital/v2/pay?merchant_name=Some%20Merchant&invoice=asd123&order_key=FFWSD&amount=%5B21.5%2C30.7%5D&merchant_addr=%5B%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%2C%22etoken%3Aqrjkte8g45yd2g8au6yslcdjlr5jzref6c89q0p5ds%22%5D&success_url=https%3A%2F%2Fexample.com%2Fsuccess%3Fid%3D123&cancel_url=https%3A%2F%2Fexample.com%2Fcancel%3Fid%3D123&ipn_url=https%3A%2F%2Fexample.com%2Fipn%3Fid%3D123&return_json=true&offer_name=Great%20offer&offer_description=This%20is%20an%20amazing%20offer%21'
 
 * TCP_NODELAY set
 * Connected to bux.digital (216.238.107.167) port 80 (#0)
